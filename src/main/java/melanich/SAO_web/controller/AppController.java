@@ -2,7 +2,9 @@ package melanich.SAO_web.controller;
 
 import melanich.SAO_web.model.User;
 import melanich.SAO_web.repository.UserRepository;
+import melanich.SAO_web.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +18,7 @@ import java.util.List;
 public class AppController {
 
 	@Autowired
-	private UserRepository userRepo;
+	private CustomUserDetailsService userDetailsService;
 	
 	@GetMapping("/register")
 	public String showRegistrationForm(Model model) {
@@ -30,7 +32,7 @@ public class AppController {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String encodedPassword = passwordEncoder.encode(user.getPassword());
 		user.setPassword(encodedPassword);
-		userRepo.save(user);
+		userDetailsService.save(user);
 		
 		return "redirect:/users";
 	}
@@ -38,8 +40,6 @@ public class AppController {
 	@GetMapping("/users")
 	@ResponseBody
 	public String listUsers(Model model) {
-		List<User> listUsers = userRepo.findAll();
-		model.addAttribute("listUsers", listUsers);
 		
 		return "users";
 	}
