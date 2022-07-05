@@ -34,13 +34,6 @@ public class AppController {
 		user.setPassword(encodedPassword);
 		userDetailsService.save(user);
 		
-		return "redirect:/users";
-	}
-	
-	@GetMapping("/users")
-	@ResponseBody
-	public String listUsers(Model model) {
-		
-		return "users";
+		return "redirect:/animals/add";
 	}
 }
